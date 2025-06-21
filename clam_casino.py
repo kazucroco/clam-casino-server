@@ -12,8 +12,10 @@ class ClamCasino:
 
     def flip(self, row, col):
         # cancel the flip if the card is already flipped or game is over
-        if self.over or self.board.flip_lut[row][col] == 1:
-            return -1
+        if self.board.flip_lut[row][col] == 1:
+            raise ValueError("Card is already flipped.")
+        elif self.over:
+            raise Exception("Game is over.")
         
         # mark the card as flipped on the LUT
         self.board.flip_lut[row][col] = 1
