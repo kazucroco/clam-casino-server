@@ -13,10 +13,8 @@ def new_game(level = 0, size = 5):
     return game_hash
 
 # requests a card flip in a given game session
-@app.route("/flip/<game_id>", methods = ["PUT"])
+@app.route("/flip/<game_id>", methods = ["POST"])
 def flip_card(game_id):
-    print(request)
-
     # check if game exists
     game = None
     try:
@@ -24,9 +22,11 @@ def flip_card(game_id):
     except:
         abort(404)
 
+    content = request.get_json()
+
     # parse card coords
-    row = int(request.args.get("row"))
-    col = int(request.args.get("col"))
+    row = int(content["row"])
+    col = int(content["col"])
 
     result = None
 
