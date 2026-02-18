@@ -1,5 +1,6 @@
 from clam_casino import ClamCasino
 from flask import Flask, request, abort
+from debug_object import DebugObject
 
 games = {}
 app = Flask(__name__)
@@ -10,6 +11,7 @@ def new_game(level = 0, size = 5):
     game = ClamCasino(level, size)
     game_hash = str(hash(game))
     games[game_hash] = game
+    DebugObject.print_solutions(game)
     return game_hash
 
 # requests a card flip in a given game session
