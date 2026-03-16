@@ -44,7 +44,15 @@ class ClamCasino:
             self.__end_game()
 
         return value
-        
+
+    def print_solutions(self):
+        for row in self.board.board:
+            print(f"{row}")
+
+    def print_lut(self):
+        for row in self.board.flip_lut:
+            print(f"{row}")
+
     def __end_game(self):
         self.over = True
         return self.score

@@ -1,6 +1,6 @@
+import os
 from clam_casino import ClamCasino
 from flask import Flask, request, abort
-from debug_object import DebugObject
 
 games = {}
 app = Flask(__name__)
@@ -11,7 +11,11 @@ def new_game(level = 0, size = 5):
     game = ClamCasino(level, size)
     game_hash = str(hash(game))
     games[game_hash] = game
-    DebugObject.print_solutions(game)
+
+    if os.getenv("CLAMCASINO_DEBUG") == "1":
+        print(f"GAME ID: {game_hash}")
+        game.print_solutions()
+
     return game_hash
 
 # requests a card flip in a given game session
@@ -38,6 +42,10 @@ def flip_card(game_id):
     except ValueError as err:
         print(err)
         abort(403)
+
+    if os.getenv("CLAMCASINO_DEBUG") == "1":
+        print(f"GAME ID: {game_id}")
+        game.print_lut()
 
     return {"card": result, "score": game.score, "over": game.over}
   
