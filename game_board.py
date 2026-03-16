@@ -29,16 +29,16 @@ class GameBoard:
             self.flip_lut.append([0] * size)
 
         # insert 0, 2, and 3 cards
-        self._insert_special(0, self._DIFFICULTY_TABLE[level][variant][0])
-        self._insert_special(2, self._DIFFICULTY_TABLE[level][variant][1])
-        self._insert_special(3, self._DIFFICULTY_TABLE[level][variant][2])
+        self.__insert_special(0, self._DIFFICULTY_TABLE[level][variant][0])
+        self.__insert_special(2, self._DIFFICULTY_TABLE[level][variant][1])
+        self.__insert_special(3, self._DIFFICULTY_TABLE[level][variant][2])
 
         # fill in the rest of the spaces with 1s
         for row in self.board:
             while len(row) < size:
                 row.insert(random.randrange(0, size + 1), 1)
 
-    def _insert_special(self, value, count):
+    def __insert_special(self, value, count):
         for i in range(0, count):
             try:
                 row = random.randrange(0, len(self.board))

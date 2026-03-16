@@ -11,7 +11,7 @@ class ClamCasino:
     def __init__(self, level, size = 5):
         self.level = level
         self.board = GameBoard(self.level, size)
-        self._get_totals()
+        self.__get_totals()
 
     def flip(self, row, col):
         # cancel the flip if the card is already flipped or game is over
@@ -29,7 +29,7 @@ class ClamCasino:
         # update score
         if value == 0:
             self.score = 0
-            self._end_game()
+            self.__end_game()
         elif self.score == 0:
             self.score += value
         else:
@@ -41,15 +41,15 @@ class ClamCasino:
 
         # end game if all special cards are turned
         if self.board.special_count <= 0:
-            self._end_game()
+            self.__end_game()
 
         return value
         
-    def _end_game(self):
+    def __end_game(self):
         self.over = True
         return self.score
     
-    def _get_totals(self):
+    def __get_totals(self):
         col_totals = []
 
         # every row in the table
