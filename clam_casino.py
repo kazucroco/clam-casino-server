@@ -11,7 +11,7 @@ class ClamCasino:
     def __init__(self, level, size = 5):
         self.level = level
         self.board = GameBoard(self.level, size)
-        self.__get_totals()
+        self.__update_totals()
 
     def flip(self, row, col):
         # cancel the flip if the card is already flipped or game is over
@@ -44,6 +44,10 @@ class ClamCasino:
             self.__end_game()
 
         return value
+    
+    def get_totals(self):
+        totals = {"rows": self.row_totals, "cols": self.col_totals}
+        return totals
 
     def print_solutions(self):
         for row in self.board.board:
@@ -57,38 +61,29 @@ class ClamCasino:
         self.over = True
         return self.score
     
-    def __get_totals(self):
+    def __update_totals(self):
+        row_totals = []
         col_totals = []
+
+        # prepopulate the array of column totals [(r0 points, r0 hazards), ... ]
+        for i in range(0, len(self.board.board)):
+            col_totals.append([0, 0])
 
         # every row in the table
         for i in range(0, len(self.board.board)):
-            row = self.board.board[i]
-            row_point_total = 0
-            row_bomb_count = 0
+            # totals for row i: (points, zeroes)
+            row = [0, 0]
 
             # every value in the row
-            for j in range(0, len(row)):
-                val = row[j]
-                # add to the row / col BOMB count
-                if val == 0:
-                    row_bomb_count += 1
-
-                    # creates table for col totals or increases count
-                    if i == 0:
-                        col_totals.append([0, 1])
-                    else:
-                        col_totals[j][1] += 1
-                    
-                # add to the row / col SCORE total
+            for j in range(0, len(self.board.board)):
+                if self.board.board[i][j] == 0:
+                    row[1] += 1
+                    col_totals[j][1] += 1
                 else:
-                    row_point_total += val
-
-                    # creates table for col totals or increases count
-                    if i == 0:
-                        col_totals.append([val, 0])
-                    else:
-                        col_totals[j][0] += val
-
-            self.row_totals.append([row_point_total, row_bomb_count])
+                    row[0] += self.board.board[i][j]
+                    col_totals[j][0] += self.board.board[i][j]
             
+            row_totals.append(row)
+                
+        self.row_totals = row_totals
         self.col_totals = col_totals

@@ -21,12 +21,7 @@ def new_game(level = 0, size = 5):
 # requests a card flip in a given game session
 @app.route("/flip/<game_id>", methods = ["POST"])
 def flip_card(game_id):
-    # check if game exists
-    game = None
-    try:
-        game = games[game_id]
-    except:
-        abort(404)
+    game = __expect_game(game_id)
 
     content = request.get_json()
 
@@ -46,6 +41,19 @@ def flip_card(game_id):
     if os.getenv("CLAMCASINO_DEBUG") == "1":
         print(f"GAME ID: {game_id}")
         game.print_lut()
-
     return {"card": result, "score": game.score, "over": game.over}
-  
+
+@app.route("/totals/<game_id>", methods = ["GET"])
+def get_totals(game_id):
+    game = __expect_game(game_id)
+
+    return game.get_totals()
+
+def __expect_game(game_id):
+    game = None
+    try:
+        game = games[game_id]
+    except:
+        abort(404)
+
+    return game
