@@ -1,9 +1,14 @@
 import os
 from clam_casino import ClamCasino
 from flask import Flask, request, abort
+from flask_cors import CORS
+
+app = Flask(__name__)
+
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://127.0.0.1:80").split(",")
+CORS(app)
 
 games = {}
-app = Flask(__name__)
 
 # creates a new game instance and stores it in the hashmap
 @app.route("/new", methods = ["POST"])
@@ -53,7 +58,7 @@ def __expect_game(game_id):
     game = None
     try:
         game = games[game_id]
-    except:
+    except(KeyError):
         abort(404)
 
     return game

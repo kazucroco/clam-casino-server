@@ -1,0 +1,21 @@
+services:
+  clam_casino_server:
+    container_name: clam_casino_server
+    build: .
+    ports:
+      - "8000"
+    restart: always
+    # UNCOMMENT THE FOLLOWING LINES FOR PRODUCTION
+    # environment:
+        # - ALLOWED_ORIGINS=http://url.com
+
+  clam_casino_proxy:
+    container_name: clam_casino_proxy
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - clam_casino_server
+    restart: always
