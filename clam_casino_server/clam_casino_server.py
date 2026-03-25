@@ -46,7 +46,11 @@ def flip_card(game_id):
     if os.getenv("CLAMCASINO_DEBUG") == "1":
         print(f"GAME ID: {game_id}")
         game.print_lut()
-    return {"card": result, "score": game.score, "over": game.over}
+
+    response = {"card": result, "score": game.score, "over": game.over}
+    games.pop(game_id)
+
+    return response
 
 @app.route("/totals/<game_id>", methods = ["GET"])
 def get_totals(game_id):
