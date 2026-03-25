@@ -48,7 +48,10 @@ def flip_card(game_id):
         game.print_lut()
 
     response = {"card": result, "score": game.score, "over": game.over}
-    games.pop(game_id)
+
+    # prepares the game for garbage collection after it has finished
+    if(game.over):
+        games.pop(game_id)
 
     return response
 
