@@ -8,7 +8,7 @@ class ClamCasino:
     col_totals = []
     over = False
     
-    def __init__(self, level, size = 5):
+    def __init__(self, level, size = 6):
         self.level = level
         self.board = GameBoard(self.level, size)
         self.__update_totals()
