@@ -12,7 +12,7 @@ games = {}
 
 # creates a new game instance and stores it in the hashmap
 @app.route("/new", methods = ["POST"])
-def new_game(level = 0, size = 5):
+def new_game(level = 0, size = 6):
     game = ClamCasino(level, size)
     game_hash = str(hash(game))
     games[game_hash] = game
