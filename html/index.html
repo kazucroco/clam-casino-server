@@ -50,7 +50,12 @@
           <div class="card-back"></div>
         </div>
       </div>
-
+      <div class="card" data-row="0" data-col="5">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
       <div class="hint row-hint">
         <div class="hint-score"><span id="hint-row-0-score">0</span></div>
         <div class="hint-bombs">
@@ -88,7 +93,12 @@
           <div class="card-back"></div>
         </div>
       </div>
-
+      <div class="card" data-row="1" data-col="5">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
       <div class="hint row-hint">
         <div class="hint-score"><span id="hint-row-1-score">0</span></div>
         <div class="hint-bombs">
@@ -126,7 +136,12 @@
           <div class="card-back"></div>
         </div>
       </div>
-
+      <div class="card" data-row="2" data-col="5">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
       <div class="hint row-hint">
         <div class="hint-score"><span id="hint-row-2-score">0</span></div>
         <div class="hint-bombs">
@@ -164,7 +179,12 @@
           <div class="card-back"></div>
         </div>
       </div>
-
+      <div class="card" data-row="3" data-col="5">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
       <div class="hint row-hint">
         <div class="hint-score"><span id="hint-row-3-score">0</span></div>
         <div class="hint-bombs">
@@ -202,11 +222,59 @@
           <div class="card-back"></div>
         </div>
       </div>
-
+      <div class="card" data-row="4" data-col="5">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
       <div class="hint row-hint">
         <div class="hint-score"><span id="hint-row-4-score">0</span></div>
         <div class="hint-bombs">
           <span id="hint-row-4-bombs">0</span> <span class="bomb-icon"></span>
+        </div>
+      </div>
+
+      <div class="card" data-row="5" data-col="0">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
+      <div class="card" data-row="5" data-col="1">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
+      <div class="card" data-row="5" data-col="2">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
+      <div class="card" data-row="5" data-col="3">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
+      <div class="card" data-row="5" data-col="4">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
+      <div class="card" data-row="5" data-col="5">
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      </div>
+      <div class="hint row-hint">
+        <div class="hint-score"><span id="hint-row-5-score">0</span></div>
+        <div class="hint-bombs">
+          <span id="hint-row-5-bombs">0</span> <span class="bomb-icon"></span>
         </div>
       </div>
 
@@ -240,6 +308,12 @@
           <span id="hint-col-4-bombs">0</span> <span class="bomb-icon"></span>
         </div>
       </div>
+      <div class="hint col-hint">
+        <div class="hint-score"><span id="hint-col-5-score">0</span></div>
+        <div class="hint-bombs">
+          <span id="hint-col-5-bombs">0</span> <span class="bomb-icon"></span>
+        </div>
+      </div>
     </div>
 
     <div id="game-over-screen" style="display: none">
@@ -258,10 +332,10 @@
       const currentScore = document.getElementById("current-score");
 
       function initBoard() {
-        let rowScores = [0, 0, 0, 0, 0];
-        let rowBombs = [0, 0, 0, 0, 0];
-        let colScores = [0, 0, 0, 0, 0];
-        let colBombs = [0, 0, 0, 0, 0];
+        let rowScores = [0, 0, 0, 0, 0, 0];
+        let rowBombs = [0, 0, 0, 0, 0, 0];
+        let colScores = [0, 0, 0, 0, 0, 0];
+        let colBombs = [0, 0, 0, 0, 0, 0];
 
         allCards.forEach((card) => {
           card.classList.remove(
@@ -287,7 +361,7 @@
           }
         });
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 6; i++) {
           document.getElementById("hint-row-" + i + "-score").innerText =
             rowScores[i];
           document.getElementById("hint-row-" + i + "-bombs").innerText =

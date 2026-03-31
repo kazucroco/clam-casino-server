@@ -96,8 +96,8 @@ body::before {
 
 #game-board {
   display: grid;
-  grid-template-columns: repeat(5, 80px) 90px;
-  grid-template-rows: repeat(5, 80px) 90px;
+  grid-template-columns: repeat(6, 80px) 90px;
+  grid-template-rows: repeat(6, 80px) 90px;
   gap: 10px;
   position: absolute;
   top: 50%;
