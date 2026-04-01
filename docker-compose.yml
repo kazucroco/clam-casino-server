@@ -7,8 +7,11 @@ services:
     restart: always
     volumes:
       - ./clam_casino_server/data:/data
-    # UNCOMMENT THE FOLLOWING LINES FOR PRODUCTION
-    # environment:
+
+    environment:
+        # provides the solution as a /flip response even before the game ends
+        - CLAMCASINO_DEBUG=1
+        # UNCOMMENT THE FOLLOWING LINE AND SET YOUR URL FOR PRODUCTION
         # - ALLOWED_ORIGINS=http://url.com
 
   clam_casino_proxy:
