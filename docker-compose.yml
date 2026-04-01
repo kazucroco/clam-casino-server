@@ -5,6 +5,8 @@ services:
     ports:
       - "8000"
     restart: always
+    volumes:
+      - ./clam_casino_server/data:/data
     # UNCOMMENT THE FOLLOWING LINES FOR PRODUCTION
     # environment:
         # - ALLOWED_ORIGINS=http://url.com
