@@ -1,7 +1,9 @@
 import os
 from clam_casino import ClamCasino
-from flask import Flask, request, abort
+from flask import Flask, request, abort, make_response, jsonify
 from flask_cors import CORS
+import datetime
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
@@ -9,6 +11,21 @@ allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://127.0.0.1:80").split(",")
 CORS(app)
 
 games = {}
+
+# tries to identify the user or create a new ID if unknown
+@app.route("/", methods = ["GET"])
+def index():
+    # checks for an existing ID in the user's browser
+    ccid = request.cookies.get("ccid")
+
+    # generate a new ID if does not exist TODO: later, make this happen with an invalid ID
+    if ccid == None:
+        ccid = __generate_ccid(request)
+
+    resp = make_response(jsonify({ "ccid": str(ccid) }))
+    resp.set_cookie("ccid", str(ccid))
+
+    return resp
 
 # creates a new game instance and stores it in the hashmap
 @app.route("/new", methods = ["POST"])
@@ -69,3 +86,8 @@ def __expect_game(game_id):
         abort(404)
 
     return game
+
+def __generate_ccid(request):
+    ip = request.remote_addr
+    time = datetime.datetime.now()
+    return generate_password_hash(str(ip) + str(time))
