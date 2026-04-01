@@ -15,7 +15,10 @@
     </div>
 
     <h1 id="game-title">Clam Casino</h1>
-
+    <form id="serverForm">
+        <input type="text" id="servername">
+        <button id="submit">Submit</button>
+    </form>
     <div id="score-board">Score: <span id="current-score">0</span></div>
     <button id="btn-restart-game">RESTART</button>
 
@@ -323,86 +326,6 @@
         <button id="btn-restart">Play Again</button>
       </div>
     </div>
-
-    <script>
-      const allCards = document.querySelectorAll(".card");
-      const restartBtn = document.getElementById("btn-restart");
-      const restartGameBtn = document.getElementById("btn-restart-game");
-      const gameOverScreen = document.getElementById("game-over-screen");
-      const currentScore = document.getElementById("current-score");
-
-      function initBoard() {
-        let rowScores = [0, 0, 0, 0, 0, 0];
-        let rowBombs = [0, 0, 0, 0, 0, 0];
-        let colScores = [0, 0, 0, 0, 0, 0];
-        let colBombs = [0, 0, 0, 0, 0, 0];
-
-        allCards.forEach((card) => {
-          card.classList.remove(
-            "is-flipped",
-            "val-0",
-            "val-1",
-            "val-2",
-            "val-3",
-          );
-
-          const val = Math.floor(Math.random() * 4);
-          card.setAttribute("data-val", val);
-
-          const r = parseInt(card.getAttribute("data-row"));
-          const c = parseInt(card.getAttribute("data-col"));
-
-          if (val === 0) {
-            rowBombs[r]++;
-            colBombs[c]++;
-          } else {
-            rowScores[r] += val;
-            colScores[c] += val;
-          }
-        });
-
-        for (let i = 0; i < 6; i++) {
-          document.getElementById("hint-row-" + i + "-score").innerText =
-            rowScores[i];
-          document.getElementById("hint-row-" + i + "-bombs").innerText =
-            rowBombs[i];
-          document.getElementById("hint-col-" + i + "-score").innerText =
-            colScores[i];
-          document.getElementById("hint-col-" + i + "-bombs").innerText =
-            colBombs[i];
-        }
-      }
-
-      initBoard();
-
-      allCards.forEach((card) => {
-        card.addEventListener("click", function () {
-          if (!this.classList.contains("is-flipped")) {
-            const val = this.getAttribute("data-val");
-            this.classList.add("is-flipped", "val-" + val);
-          }
-        });
-      });
-
-      document.body.addEventListener(
-        "click",
-        function () {
-          const bgm = document.getElementById("bgm");
-          if (bgm.paused) {
-            bgm.play();
-          }
-        },
-        { once: true },
-      );
-
-      function resetGameUI() {
-        gameOverScreen.style.display = "none";
-        currentScore.innerText = "0";
-        initBoard();
-      }
-
-      restartBtn.addEventListener("click", resetGameUI);
-      restartGameBtn.addEventListener("click", resetGameUI);
-    </script>
+    <script src="script.js" defer></script>
   </body>
 </html>
