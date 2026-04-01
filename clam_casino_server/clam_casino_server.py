@@ -30,10 +30,14 @@ CORS(app)
 # list of active games on the server, accessed using the object hash as a key
 games = {}
 
-# tries to identify the user or create a new ID if unknown
+# generate and set a new cookie if none is found
 @app.route("/", methods = ["GET"])
 def index():
-    resp = __get_cookie_or_make(request)
+    resp = request.cookies.get("ccid")
+    if ccid == None or __get_score(ccid) == None:
+        ccid = __generate_ccid(request)
+    resp = make_response(jsonify({"ccid" : ccid}))
+    resp.set_cookie("ccid", ccid)
     return resp
 
 # creates a new game instance and stores it in the hashmap
@@ -42,7 +46,9 @@ def new_game(level = 0, size = 6):
     content = request.get_json()
 
     # get game owner
-    ccid = __get_cookie_or_make(request).get_json()["ccid"]
+    ccid = request.cookies.get("ccid")
+    if ccid == None or __get_score(ccid) == None:
+        ccid = __generate_ccid(request)
     
     # change the board size if requested, otherwise use 6
     try:
@@ -72,7 +78,11 @@ def new_game(level = 0, size = 6):
         print(f"GAME ID: {game_hash}")
         game.print_solutions()
 
-    resp = { "game_id": str(game_hash), "pscore": __get_score(ccid), "totals": game.get_totals(), "size": str(len(game.board.board)), "level": level}
+    resp = { "game_id": str(game_hash), "pscore": __get_score(ccid), "totals": game.get_totals(), "size": str(len(game.board.board)), "level": level }
+    # conversion to the flask response type to prepare for cookie
+    resp = make_response(jsonify(resp))
+    resp.set_cookie("ccid", str(ccid))
+
 
     return resp
 
@@ -81,7 +91,7 @@ def new_game(level = 0, size = 6):
 def flip_card(game_id):
     # locate the game and its owner
     game = __expect_game(game_id)
-    ccid = __get_cookie_or_make(request).get_json()["ccid"]
+    ccid = request.cookies.get("ccid")
 
     # disallow users from interacting with each others games
     if game.owner != ccid:
@@ -142,7 +152,9 @@ def __expect_game(game_id):
 def __generate_ccid(request):
     ip = request.remote_addr
     time = datetime.datetime.now()
-    return generate_password_hash(str(ip) + str(time))
+    ccid = generate_password_hash(str(ip) + str(time))
+    __set_score(ccid, 0)
+    return ccid
 
 def __set_score(ccid, pscore):
     conn = sqlite3.connect("./data/pscores.sqlite")
@@ -182,17 +194,3 @@ def __get_score(ccid):
         print(f"Database error: {e}")
     finally:
         conn.close()
-
-def __get_cookie_or_make(request):
-    # checks for an existing ID in the user's browser
-    ccid = request.cookies.get("ccid")
-
-    # generate a new ID if does not exist or invalid
-    if ccid == None or __get_score(ccid) == None:
-        ccid = __generate_ccid(request)
-        __set_score(ccid, 0)
-
-    resp = make_response(jsonify({ "ccid": str(ccid) }))
-    resp.set_cookie("ccid", str(ccid))
-
-    return resp
