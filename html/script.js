@@ -15,7 +15,7 @@ form.addEventListener("submit", function(event) {
     const serverID=servInput.value;
     const pushAddress=serverID+"/new";//user should only enter address not port or /new
     console.log(serverID);
-    const gamecode = fetchReq(pushAddress).then(value=>connectMain(value, serverID).then(totals=>initBoard(totals)));
+    const gamecode = fetchReq(pushAddress).then(value=>connectMain(value, serverID));
 });
 //begin junji code
     const allCards = document.querySelectorAll(".card");
@@ -59,16 +59,20 @@ form.addEventListener("submit", function(event) {
     }
 
     //initBoard();
-
-    allCards.forEach((card) => {
-      card.addEventListener("click", function () {
-        if (!this.classList.contains("is-flipped")) {
-            
-            const val = flipCard(this.r, this.c, address, gamecode);//maybe add a .then
-            this.classList.add("is-flipped", "val-" + val);//to make these 2 lines work
-        }
-      });
-    });
+    async function cardListen(address, gamecode) {
+        allCards.forEach((card) => {
+          card.addEventListener("click", async function () {
+            if (!this.classList.contains("is-flipped")) {
+                const r = parseInt(card.getAttribute("data-row"));
+                const c = parseInt(card.getAttribute("data-col"));
+                let result = await flipCard(r, c, address, gamecode);//maybe add a .then
+                result = JSON.parse(result);
+                const val = result.card;
+                this.classList.add("is-flipped", "val-" + val);//to make these 2 lines work
+            }
+          });
+        });
+    }
 
     document.body.addEventListener(
       "click",
@@ -97,7 +101,8 @@ async function connectMain(gamecode, address) {//executes after address form is 
     tempAddress = address + "/totals/" + gamecode;
     console.log(tempAddress);
     const rowCol=await fetchReq(tempAddress, null, "GET");
-    return JSON.parse(rowCol);
+    initBoard(JSON.parse(rowCol));
+    cardListen(address, gamecode);
 }
 
 async function flipCard(rowNum, colNum, address, gamecode) {
