@@ -16,6 +16,8 @@ class GameBoard:
                          [[10, 0, 7], [10, 8, 2], [10, 5, 4], [10, 2, 6], [10, 7, 3]]]
 
     def __init__(self, level = 0, size = 5):
+        if level > len(self._DIFFICULTY_TABLE) - 1:
+            raise IndexError("Requested level ({level}) is greater than maximum ({len(self._DIFFICULTY_TABLE)})")
         # select variant 0-4
         variant = random.randrange(0, 5)
 

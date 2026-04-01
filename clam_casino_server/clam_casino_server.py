@@ -28,9 +28,31 @@ def index():
     return resp
 
 # creates a new game instance and stores it in the hashmap
-@app.route("/new", methods = ["POST"])
+@app.route("/new", methods = ["GET"])
 def new_game(level = 0, size = 6):
-    game = ClamCasino(level, size)
+    content = request.get_json()
+    
+    # change the board size if requested, otherwise use 6
+    try:
+        size = int(content["size"])
+    except KeyError:
+        pass
+    
+    # change game level if requested, otherwise use 0
+    try:
+        level = int(content["level"])
+    except KeyError:
+        pass
+
+    try:
+        game = ClamCasino(level, size)
+    except IndexError:
+        # give a bad request response if the level is out of range
+        abort(400)
+    except:
+        # internal server error otherwise
+        abort(503)
+
     game_hash = str(hash(game))
     games[game_hash] = game
 
@@ -38,7 +60,9 @@ def new_game(level = 0, size = 6):
         print(f"GAME ID: {game_hash}")
         game.print_solutions()
 
-    return game_hash
+    resp = { "game_id": str(game_hash), "totals": game.get_totals(), "size": str(len(game.board.board)), "level": level}
+
+    return resp
 
 # requests a card flip in a given game session
 @app.route("/flip/<game_id>", methods = ["POST"])
