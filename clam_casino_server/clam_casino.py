@@ -51,6 +51,12 @@ class ClamCasino:
         totals = {"rows": self.row_totals, "cols": self.col_totals}
         return totals
 
+    def get_board(self):
+        return self.board.board
+
+    def get_lut(self):
+        return self.board.flip_lut
+
     def print_solutions(self):
         for row in self.board.board:
             print(f"{row}")

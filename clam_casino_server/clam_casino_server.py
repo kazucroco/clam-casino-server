@@ -13,7 +13,7 @@ cursor = conn.cursor()
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS pscores (
     ccid TEXT PRIMARY KEY,
-    pscore REAL
+    pscore INTEGER
     )
 ''')
 
@@ -33,7 +33,7 @@ games = {}
 # generate and set a new cookie if none is found
 @app.route("/", methods = ["GET"])
 def index():
-    resp = request.cookies.get("ccid")
+    ccid = request.cookies.get("ccid")
     if ccid == None or __get_score(ccid) == None:
         ccid = __generate_ccid(request)
     resp = make_response(jsonify({"ccid" : ccid}))
@@ -78,7 +78,7 @@ def new_game(level = 0, size = 6):
         print(f"GAME ID: {game_hash}")
         game.print_solutions()
 
-    resp = { "game_id": str(game_hash), "pscore": __get_score(ccid), "totals": game.get_totals(), "size": str(len(game.board.board)), "level": level }
+    resp = { "game_id": str(game_hash), "pscore": __get_score(ccid), "totals": game.get_totals(), "size": len(game.board.board), "level": level }
     # conversion to the flask response type to prepare for cookie
     resp = make_response(jsonify(resp))
     resp.set_cookie("ccid", str(ccid))
@@ -92,6 +92,8 @@ def flip_card(game_id):
     # locate the game and its owner
     game = __expect_game(game_id)
     ccid = request.cookies.get("ccid")
+    solution = []
+    flip_lut = game.get_lut()
 
     # disallow users from interacting with each others games
     if game.owner != ccid:
@@ -116,6 +118,7 @@ def flip_card(game_id):
         abort(404)
 
     if os.getenv("CLAMCASINO_DEBUG") == "1":
+        solution = game.get_board()
         print(f"GAME ID: {game_id}")
         game.print_lut()
 
@@ -124,9 +127,10 @@ def flip_card(game_id):
     if game.over:
         __set_score(game.owner, pscore + game.score)
         pscore = __get_score(game.owner)
+        solution = game.get_board()
 
     # prepare the response before the game is deleted
-    response = {"card": result, "score": game.score, "pscore": pscore, "over": game.over}
+    response = {"card": result, "score": game.score, "pscore": pscore, "over": game.over, "flip_lut": flip_lut, "solution": solution}
 
     # prepares the game for garbage collection after it has finished
     if(game.over):
