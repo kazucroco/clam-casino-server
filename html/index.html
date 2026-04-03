@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CLAM CASINO</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="balatro-bg">
+      <div class="blob orange"></div>
+      <div class="blob blue"></div>
+      <div class="blob purple"></div>
+    </div>
+
+    <div id="start-screen">
+      <h1 id="start-title">
+        <span>C</span><span>L</span><span>A</span><span>M</span>
+        <span class="space">&nbsp;</span>
+        <span>C</span><span>A</span><span>S</span><span>I</span><span>N</span
+        ><span>O</span>
+      </h1>
+
+      <div class="controls-container">
+        <form id = "serverForm">
+        <input
+          type="text" id="servername" value = "http://167.172.253.106"
+        >
+        <button id="btn-start" type="submit">START GAME</button>
+        </form>
+      </div>
+    </div>
+
+    <audio id="bgm" src="MainTheme.mp3" loop preload="auto"></audio>
+
+    <div id="game-screen" style="display: none">
+      <h1 id="game-title">CLAM CASINO</h1>
+
+      <div id="score-board">Score: <span id="current-score">0</span></div>
+      <button id="btn-restart-game">RESTART</button>
+
+      <div id="game-board">
+        <div class="card" data-row="0" data-col="0">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="0" data-col="1">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="0" data-col="2">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="0" data-col="3">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="0" data-col="4">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="0" data-col="5">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="hint row-hint">
+          <div class="hint-score"><span id="hint-row-0-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-row-0-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+
+        <div class="card" data-row="1" data-col="0">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="1" data-col="1">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="1" data-col="2">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="1" data-col="3">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="1" data-col="4">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="1" data-col="5">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="hint row-hint">
+          <div class="hint-score"><span id="hint-row-1-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-row-1-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+
+        <div class="card" data-row="2" data-col="0">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="2" data-col="1">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="2" data-col="2">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="2" data-col="3">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="2" data-col="4">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="2" data-col="5">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="hint row-hint">
+          <div class="hint-score"><span id="hint-row-2-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-row-2-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+
+        <div class="card" data-row="3" data-col="0">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="3" data-col="1">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="3" data-col="2">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="3" data-col="3">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="3" data-col="4">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="3" data-col="5">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="hint row-hint">
+          <div class="hint-score"><span id="hint-row-3-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-row-3-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+
+        <div class="card" data-row="4" data-col="0">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="4" data-col="1">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="4" data-col="2">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="4" data-col="3">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="4" data-col="4">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="4" data-col="5">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="hint row-hint">
+          <div class="hint-score"><span id="hint-row-4-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-row-4-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+
+        <div class="card" data-row="5" data-col="0">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="5" data-col="1">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="5" data-col="2">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="5" data-col="3">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="5" data-col="4">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="card" data-row="5" data-col="5">
+          <div class="card-inner">
+            <div class="card-front"></div>
+            <div class="card-back"></div>
+          </div>
+        </div>
+        <div class="hint row-hint">
+          <div class="hint-score"><span id="hint-row-5-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-row-5-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+
+        <div class="hint col-hint">
+          <div class="hint-score"><span id="hint-col-0-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-col-0-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+        <div class="hint col-hint">
+          <div class="hint-score"><span id="hint-col-1-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-col-1-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+        <div class="hint col-hint">
+          <div class="hint-score"><span id="hint-col-2-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-col-2-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+        <div class="hint col-hint">
+          <div class="hint-score"><span id="hint-col-3-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-col-3-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+        <div class="hint col-hint">
+          <div class="hint-score"><span id="hint-col-4-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-col-4-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+        <div class="hint col-hint">
+          <div class="hint-score"><span id="hint-col-5-score">0</span></div>
+          <div class="hint-bombs">
+            <span id="hint-col-5-bombs">0</span> <span class="bomb-icon"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="game-over-screen" style="display: none">
+      <div class="modal-content">
+        <h2 id="game-over-title">Game Over</h2>
+        <p>Final Score: <span id="final-score">0</span></p>
+        <button id="btn-restart">Play Again</button>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
