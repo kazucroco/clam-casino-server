@@ -9,10 +9,52 @@ services:
       - ./clam_casino_server/data:/data
 
     environment:
-        # provides the solution as a /flip response even before the game ends
-        - CLAMCASINO_DEBUG=1
         # UNCOMMENT THE FOLLOWING LINE AND SET YOUR URL FOR PRODUCTION
         # - ALLOWED_ORIGINS=http://url.com
+
+        # Provides the solution as a /flip response even before the game ends.
+        - CLAMCASINO_DEBUG=1
+
+        #
+        # GAME CONFIGURATION
+        #
+
+        # Number of rows and columns in each board. 6 represents a 6x6 grid.
+        - BOARD_SIZE=6
+
+        # Use card distributions and levels from the original Voltorb Flip game.
+        # (overrides all values after)
+        - USE_VTFLIP_VALS=0
+
+        # Max level you wish the player to be able to choose (0 indexed).
+        # Currently, only values 0-7 are designed to work.
+        - MAX_LEVEL=7
+
+        # Number of 0 cards generated per board, per level.
+        - L0_ZEROS=
+        - L1_ZEROS=7
+        - L2_ZEROS=8
+        - L3_ZEROS=9
+        - L4_ZEROS=10
+        - L5_ZEROS=11
+        - L6_ZEROS=12
+        - L7_ZEROS=13
+
+        # This is the maximum score that should be able to be earned per level.
+        # The board generator may create boards less than this value, but
+        # never exceed it. Zero cards take priority. For instance, if the 
+        # chosen value exceeds 3 * {BOARD_SIZE}**2, the board will generate with
+        # the specified number of 0 cards, as many 2 / 3 cards as possible.
+        # Values less than 2 will be converted to 2.
+        # A lower level score MUST be lower than the higher level score.
+        - L0_MAXSCORE=48
+        - L1_MAXSCORE=96
+        - L2_MAXSCORE=192
+        - L3_MAXSCORE=324
+        - L4_MAXSCORE=576
+        - L5_MAXSCORE=972
+        - L6_MAXSCORE=1728
+        - L7_MAXSCORE=3456
 
   clam_casino_proxy:
     container_name: clam_casino_proxy
