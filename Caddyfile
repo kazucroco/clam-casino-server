@@ -1,0 +1,15 @@
+kitsu.croco.dev {
+    root * /var/www/html
+    
+    @static_files file {
+        try_files {path} {path}/
+    }
+
+    handle @static_files {
+        file_server
+    }
+
+    handle {
+	reverse_proxy clam_casino_server:8000
+    }
+}

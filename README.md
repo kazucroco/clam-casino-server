@@ -3,30 +3,34 @@ Clam Casino is a single player card game based on Voltorb Flip which focuses on 
 
 One of the primary goals of this project was to separate the frontend and backend. All game state and logic is stored and calculated on a Python server, and player inputs are performed through HTTP requests. This ensures the player cannot simply see the location of all 0 cards (or other hidden gameplay information) by inspecting the page. While there are occasions where the entire board can be calculated based on the given information, the game often forces the player to take a chance between cards, adding to its appeal.
 
-The Clam Casino server currently runs in Python using [Flask](https://flask.palletsprojects.com/en/stable/). This repository in particular provides a `Dockerfile` and `docker-compose.yml` for easy production setups, using [Gunicorn](https://gunicorn.org/) as a WSGI server, and [nginx](https://nginx.org/) as a proxy to manage the incoming requests.
+The Clam Casino server currently runs in Python using [Flask](https://flask.palletsprojects.com/en/stable/). This repository in particular provides a `Dockerfile` and `docker-compose.yml` for easy production setups, using [Gunicorn](https://gunicorn.org/) as a WSGI server, and [Caddy](https://caddyserver.com) as a web server and proxy to manage the incoming requests.
 
-*An official frontend is currently in development.*
+A dedicated server is currently in the works, and will be published once the frontend has been finished.
 
-For most users, this is what you are waiting for. It is planned to be hosted and playable on a public website once it has been completed.
 ## Server Installation and Setup
-**Note:** This is for self-hosting your own instance! If you are just looking to play the game, this is not what you're looking for.
+**Note:** This is for self-hosting your own instance! If you are just looking to play the game, this is not what you're looking for. This assumes you have a server to run it on and at least a little bit of command line experience.
 ### Requirements
 - [Docker](https://www.docker.com/get-started/)
-- Some software to make HTTP requests to the server.
-  - I've been using [Postman](https://www.postman.com/downloads/) for testing.
+- Some server to host the site and server on.
+- Some domain that points to your server.
 ### Installation Instructions
 - Clone this repository to a directory of your choice.
 - Navigate to the directory in a terminal (PowerShell, Konsole, etc.).
 - Run `docker compose up -d --build`
 	- This will create the containers for the game server and the nginx proxy and run them in the background.
 ### Configuration
-- Server configuration is done through the environment variables set in the `docker-compose.yml` file. To modify the configuration, open the file in your favorite text editor and change the values of the variables.
+#### Game
+- Game configuration (max scores per levels, available levels) is done through the environment variables set in the `docker-compose.yml` file. To modify the configuration, open the file in your favorite text editor and change the values of the variables. More information about their purpose is written in the file's comments.
+#### Server
+- In `docker-compose.yml`, enter your website's URL into the value of `ALLOWED_ORIGINS`. Do **NOT** include a slash at the end, or you may encounter issues. Correct example: `ALLOWED_ORIGINS=https://kitsu.croco.dev`
+- In `Caddyfile`, on the first line, change `kitsu.croco.dev` to the same domain that you use in your server URL **without** the `https://`.
+
 > After changing configuration, rebuild the container by running `docker compose up -d --build` again.
 
 ## Interaction and Endpoints
-The server addresses in this section all assume local testing, so they are `http://127.0.0.1:80`. If you are running the server on a different device, use that device's IP address in place of `127.0.0.1`.
+The server addresses in this section are all written in terms of `kitsu.croco.dev`. Naturally, interactions with your own server would use your domain / IP.
 ### New Game
-- To start a new game, send a **GET** request to: `http://127.0.0.1:80/new`
+- To start a new game, send a **GET** request to: `https://kitsu.croco.dev/new`
 	- Your request should be an `application/json` object. If empty, a level 0 game will be requested from the server.
 	- You can modify this request by changing the value of `"level"` in the body.
 ```json
@@ -61,7 +65,7 @@ The server addresses in this section all assume local testing, so they are `http
 	- Rows and columns are zero-indexed, and counted from left to right / top to bottom.
 	- i.e) `rows[0]` is `[9,1]`, indicating that the sum of digits for cards in the first row is 9, and the row contains a single 0 card.
 ### Flip Cards
-- To flip a card, send a **POST** request to: `http://127.0.0.1:80/flip/{game_ID}` with the following JSON body:
+- To flip a card, send a **POST** request to: `https://kitsu.croco.dev/flip/{game_ID}` with the following JSON body:
   ```json
   {
     "row": 0,
