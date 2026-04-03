@@ -24,8 +24,8 @@ print("Database initialized.")
 # prepare flask (api)
 app = Flask(__name__)
 
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://127.0.0.1:80").split(",")
-CORS(app, supports_credentials=True)
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "null").split(",")
+CORS(app, origins=allowed_origins, supports_credentials=True)
 
 # list of active games on the server, accessed using the object hash as a key
 games = {}
