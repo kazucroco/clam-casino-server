@@ -7,8 +7,10 @@ class ClamCasino:
     row_totals = []
     col_totals = []
     over = False
+    owner = None
     
-    def __init__(self, level, size = 6):
+    def __init__(self, owner, level, size = 6):
+        self.owner = owner
         self.level = level
         self.board = GameBoard(self.level, size)
         self.__update_totals()
@@ -48,6 +50,12 @@ class ClamCasino:
     def get_totals(self):
         totals = {"rows": self.row_totals, "cols": self.col_totals}
         return totals
+
+    def get_board(self):
+        return self.board.board
+
+    def get_lut(self):
+        return self.board.flip_lut
 
     def print_solutions(self):
         for row in self.board.board:
