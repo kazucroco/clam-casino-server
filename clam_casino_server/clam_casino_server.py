@@ -42,19 +42,13 @@ def index():
 
 # creates a new game instance and stores it in the hashmap
 @app.route("/new", methods = ["GET"])
-def new_game(level = 0, size = 6):
+def new_game(level = 0):
     content = request.get_json()
 
     # get game owner
     ccid = request.cookies.get("ccid")
     if ccid == None or __get_score(ccid) == None:
         ccid = __generate_ccid(request)
-    
-    # change the board size if requested, otherwise use 6
-    try:
-        size = int(content["size"])
-    except KeyError:
-        pass
     
     # change game level if requested, otherwise use 0
     try:
@@ -63,7 +57,7 @@ def new_game(level = 0, size = 6):
         pass
 
     try:
-        game = ClamCasino(ccid, level, size)
+        game = ClamCasino(ccid, level)
     except IndexError:
         # give a bad request response if the level is out of range
         abort(400)
