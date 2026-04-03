@@ -17,13 +17,26 @@ form.addEventListener("submit", function(event) {
     console.log(serverID);
     const gamecode = fetchReq(pushAddress).then(value=>connectMain(value, serverID));
 });
+
 //begin junji code
+
     const allCards = document.querySelectorAll(".card");
     const restartBtn = document.getElementById("btn-restart");
     const restartGameBtn = document.getElementById("btn-restart-game");
     const gameOverScreen = document.getElementById("game-over-screen");
     const currentScore = document.getElementById("current-score");
-
+    const btnStart = document.getElementById("btn-start");
+    const startScreen = document.getElementById("start-screen");
+    const gameScreen = document.getElementById("game-screen");
+    const bgmAudio = document.getElementById("bgm");
+    btnStart.addEventListener("click", function () {
+        startScreen.style.display = "none";
+        gameScreen.style.display = "block";
+        initBoard();
+        if (bgmAudio.paused) {
+          bgmAudio.play();
+        }
+      });
     function initBoard(totals) {
       let rowScores = [0, 0, 0, 0, 0, 0];
       let rowBombs = [0, 0, 0, 0, 0, 0];

@@ -21,15 +21,12 @@
       </h1>
 
       <div class="controls-container">
+        <form id = "serverForm">
         <input
-          type="range"
-          id="volume-slider"
-          min="0"
-          max="1"
-          step="0.01"
-          value="0.5"
-        />
-        <button id="btn-start">START GAME</button>
+          type="text" id="servername" value = "http://167.172.253.106"
+        >
+        <button id="btn-start" type="submit">START GAME</button>
+        </form>
       </div>
     </div>
 
@@ -347,123 +344,6 @@
       </div>
     </div>
 
-    <script>
-      const allCards = document.querySelectorAll(".card");
-      const restartBtn = document.getElementById("btn-restart");
-      const restartGameBtn = document.getElementById("btn-restart-game");
-      const gameOverScreen = document.getElementById("game-over-screen");
-      const currentScore = document.getElementById("current-score");
-      const startScreen = document.getElementById("start-screen");
-      const gameScreen = document.getElementById("game-screen");
-      const btnStart = document.getElementById("btn-start");
-      const volumeSlider = document.getElementById("volume-slider");
-      const bgmAudio = document.getElementById("bgm");
-
-      let currentTotalScore = 0;
-      let isBoardLocked = false;
-
-      bgmAudio.volume = 0.5;
-
-      document.body.addEventListener(
-        "click",
-        function () {
-          if (bgmAudio.paused) {
-            bgmAudio.play();
-          }
-        },
-        { once: true },
-      );
-
-      function initBoard() {
-        let rowScores = [0, 0, 0, 0, 0, 0];
-        let rowBombs = [0, 0, 0, 0, 0, 0];
-        let colScores = [0, 0, 0, 0, 0, 0];
-        let colBombs = [0, 0, 0, 0, 0, 0];
-
-        allCards.forEach((card) => {
-          card.classList.remove(
-            "is-flipped",
-            "val-0",
-            "val-1",
-            "val-2",
-            "val-3",
-          );
-
-          const val = Math.floor(Math.random() * 4);
-          card.setAttribute("data-val", val);
-
-          const r = parseInt(card.getAttribute("data-row"));
-          const c = parseInt(card.getAttribute("data-col"));
-
-          if (val === 0) {
-            rowBombs[r]++;
-            colBombs[c]++;
-          } else {
-            rowScores[r] += val;
-            colScores[c] += val;
-          }
-        });
-
-        for (let i = 0; i < 6; i++) {
-          document.getElementById("hint-row-" + i + "-score").innerText =
-            rowScores[i];
-          document.getElementById("hint-row-" + i + "-bombs").innerText =
-            rowBombs[i];
-          document.getElementById("hint-col-" + i + "-score").innerText =
-            colScores[i];
-          document.getElementById("hint-col-" + i + "-bombs").innerText =
-            colBombs[i];
-        }
-      }
-
-      allCards.forEach((card) => {
-        card.addEventListener("click", function () {
-          if (isBoardLocked || this.classList.contains("is-flipped")) return;
-
-          const val = parseInt(this.getAttribute("data-val"));
-          this.classList.add("is-flipped", "val-" + val);
-
-          if (val === 0) {
-            isBoardLocked = true;
-            currentTotalScore = 0;
-            currentScore.innerText = currentTotalScore;
-            setTimeout(() => {
-              resetGameUI();
-            }, 600);
-          } else {
-            if (currentTotalScore === 0) {
-              currentTotalScore = val;
-            } else {
-              currentTotalScore *= val;
-            }
-            currentScore.innerText = currentTotalScore;
-          }
-        });
-      });
-
-      function resetGameUI() {
-        gameOverScreen.style.display = "none";
-        currentTotalScore = 0;
-        currentScore.innerText = "0";
-        isBoardLocked = false;
-        initBoard();
-      }
-
-      restartBtn.addEventListener("click", resetGameUI);
-      restartGameBtn.addEventListener("click", resetGameUI);
-
-      btnStart.addEventListener("click", function () {
-        startScreen.style.display = "none";
-        gameScreen.style.display = "block";
-        initBoard();
-        if (bgmAudio.paused) {
-          bgmAudio.play();
-        }
-      });
-
-      volumeSlider.addEventListener("input", function (e) {
-        bgmAudio.volume = e.target.value;
-      });
-    </script>
+    <script src="script.js" defer></script>
   </body>
 </html>
