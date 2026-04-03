@@ -41,7 +41,7 @@ def index():
     return resp
 
 # creates a new game instance and stores it in the hashmap
-@app.route("/new", methods = ["GET"])
+@app.route("/new", methods = ["POST"])
 def new_game(level = 0):
     content = request.get_json()
 
