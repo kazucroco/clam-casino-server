@@ -25,7 +25,7 @@ print("Database initialized.")
 app = Flask(__name__)
 
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://127.0.0.1:80").split(",")
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # list of active games on the server, accessed using the object hash as a key
 games = {}
@@ -37,7 +37,7 @@ def index():
     if ccid == None or __get_score(ccid) == None:
         ccid = __generate_ccid(request)
     resp = make_response(jsonify({"ccid" : ccid}))
-    resp.set_cookie("ccid", ccid)
+    resp.set_cookie("ccid", str(ccid), secure=True, samesite=None, partitioned=True)
     return resp
 
 # creates a new game instance and stores it in the hashmap
@@ -75,7 +75,7 @@ def new_game(level = 0):
     resp = { "game_id": str(game_hash), "pscore": __get_score(ccid), "totals": game.get_totals(), "size": len(game.board.board), "level": level }
     # conversion to the flask response type to prepare for cookie
     resp = make_response(jsonify(resp))
-    resp.set_cookie("ccid", str(ccid))
+    resp.set_cookie("ccid", str(ccid), secure=True, samesite=None, partitioned=True)
 
 
     return resp
