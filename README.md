@@ -30,7 +30,7 @@ A dedicated server is currently in the works, and will be published once the fro
 ## Interaction and Endpoints
 The server addresses in this section are all written in terms of `kitsu.croco.dev`. Naturally, interactions with your own server would use your domain / IP.
 ### New Game
-- To start a new game, send a **GET** request to: `https://kitsu.croco.dev/new`
+- To start a new game, send a **POST** request to: `https://kitsu.croco.dev/new`
 	- Your request should be an `application/json` object. If empty, a level 0 game will be requested from the server.
 	- You can modify this request by changing the value of `"level"` in the body.
 ```json

@@ -31,7 +31,7 @@ services:
         - MAX_LEVEL=7
 
         # Number of 0 cards generated per board, per level.
-        - L0_ZEROS=
+        - L0_ZEROS=6
         - L1_ZEROS=7
         - L2_ZEROS=8
         - L3_ZEROS=9
@@ -42,11 +42,7 @@ services:
 
         # This is the maximum score that should be able to be earned per level.
         # The board generator may create boards less than this value, but
-        # never exceed it. Zero cards take priority. For instance, if the 
-        # chosen value exceeds 3 * {BOARD_SIZE}**2, the board will generate with
-        # the specified number of 0 cards, as many 2 / 3 cards as possible.
-        # Values less than 2 will be converted to 2.
-        # A lower level score MUST be lower than the higher level score.
+        # never exceed it. Zero cards take priority. 
         - L0_MAXSCORE=48
         - L1_MAXSCORE=96
         - L2_MAXSCORE=192
@@ -71,6 +67,7 @@ services:
     depends_on:
       - clam_casino_server
     environment:
+      # Replace with your own domain excluding https:// 
       - SERVER_DOMAIN=kitsu.croco.dev
 
 volumes:
