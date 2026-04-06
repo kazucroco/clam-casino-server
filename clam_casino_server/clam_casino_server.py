@@ -37,7 +37,11 @@ def index():
     if ccid == None or __get_score(ccid) == None:
         ccid = __generate_ccid(request)
     resp = make_response(jsonify({"ccid" : ccid}))
-    resp.set_cookie("ccid", str(ccid), secure=True, samesite=None, partitioned=True, expires=datetime.datetime.now() + datetime.timedelta(days=os.getenv("COOKIE_SHELFLIFE", 30)))
+
+    days = int(os.getenv("COOKIE_SHELFLIFE", 30))
+    max_age_seconds = days * 24 * 60 * 60
+
+    resp.set_cookie("ccid", str(ccid), secure=True, samesite="None", partitioned=True, max_age=max_age_seconds)
     return resp
 
 # creates a new game instance and stores it in the hashmap
@@ -75,9 +79,12 @@ def new_game(level = 0):
     resp = { "game_id": str(game_hash), "pscore": __get_score(ccid), "totals": game.get_totals(), "size": len(game.board.board), "level": level }
     # conversion to the flask response type to prepare for cookie
     resp = make_response(jsonify(resp))
-    resp.set_cookie("ccid", str(ccid), secure=True, samesite=None, partitioned=True, expires=datetime.datetime.now() + datetime.timedelta(days=os.getenv("COOKIE_SHELFLIFE", 30)))
 
+    days = int(os.getenv("COOKIE_SHELFLIFE", 30))
+    max_age_seconds = days * 24 * 60 * 60
 
+    resp.set_cookie("ccid", str(ccid), secure=True, samesite="None", partitioned=True, max_age=max_age_seconds)    
+    
     return resp
 
 # requests a card flip in a given game session
