@@ -23,6 +23,7 @@ print("Database initialized.")
 
 # prepare flask (api)
 app = Flask(__name__)
+app.permanent_session_lifetime = True
 
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "null").split(",")
 CORS(app, origins=allowed_origins, supports_credentials=True)
