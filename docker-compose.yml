@@ -19,6 +19,9 @@ services:
         # GAME CONFIGURATION
         #
 
+        # Number of days to keep keep cookies (persistent scores) until they expire.
+        - COOKIE_SHELFLIFE=30
+
         # Number of rows and columns in each board. 6 represents a 6x6 grid.
         - BOARD_SIZE=6
 
