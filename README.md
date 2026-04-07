@@ -5,10 +5,10 @@ One of the primary goals of this project was to separate the frontend and backen
 
 The Clam Casino server currently runs in Python using [Flask](https://flask.palletsprojects.com/en/stable/). This repository in particular provides a `Dockerfile` and `docker-compose.yml` for easy production setups, using [Gunicorn](https://gunicorn.org/) as a WSGI server, and [Caddy](https://caddyserver.com) as a web server and proxy to manage the incoming requests.
 
-A dedicated server is currently in the works, and will be published once the frontend has been finished.
+### [**Try it out!**](https://kitsu.croco.dev)
 
 ## Server Installation and Setup
-**Note:** This is for self-hosting your own instance! If you are just looking to play the game, this is not what you're looking for. This assumes you have a server to run it on and at least a little bit of command line experience.
+**Note:** This is for self-hosting your own instance! If you are just looking to play the game, this is not what you're looking for. This assumes you have a computer to run it on and at least a little bit of command line experience.
 ### Requirements
 - [Docker](https://www.docker.com/get-started/) (v29.3 is tested, older versions may work)
 - **For local hosting / testing:** a modern, Chromium-based browser.
