@@ -10,25 +10,29 @@ A dedicated server is currently in the works, and will be published once the fro
 ## Server Installation and Setup
 **Note:** This is for self-hosting your own instance! If you are just looking to play the game, this is not what you're looking for. This assumes you have a server to run it on and at least a little bit of command line experience.
 ### Requirements
-- [Docker](https://www.docker.com/get-started/)
-- Some server to host the site and server on.
-- Some domain that points to your server.
+- [Docker](https://www.docker.com/get-started/) (v29.3 is tested, older versions may work)
+- **For local hosting / testing:** a modern, Chromium-based browser.
+	- Other browsers (like Firefox) are perfectly capable of interacting with the server, it is much more difficult to bypass the self-signed certificate warning.
+- **For remote hosting / public servers:** a domain you own which points to the server you wish to host the Clam Casino server on.
+	- Setting up A records, port forwarding, etc, are out of scope of this guide. The rest of the instructions assume you are only testing locally.
 ### Installation Instructions
 - Clone this repository to a directory of your choice.
 - Navigate to the directory in a terminal (PowerShell, Konsole, etc.).
 - Run `docker compose up -d --build`
-	- This will create the containers for the game server and the nginx proxy and run them in the background.
+	- This will create the containers for the game server and the Caddy proxy and run them in the background.
+	- If this fails, it is likely that you are already running other servers on ports `80` or `443`. You can change the port mapping in `docker-compose.yml` to use alternative ports if needed. For example, change `80:80` to `8080:80` and `443:443` to `8443:443` to host the web server on ports `8080` and `8443`.
 ### Configuration
 #### Game
-- Game configuration (max scores per levels, available levels) is done through the environment variables set in the `docker-compose.yml` file. To modify the configuration, open the file in your favorite text editor and change the values of the variables. More information about their purpose is written in the file's comments.
+- Game configuration (i.e. max score per level) is done through the environment variables set in the `docker-compose.yml` file. To modify the configuration, open the file in your favorite text editor and change the values of the variables. More information about their purpose is written in the file's comments.
 #### Server
 - In `docker-compose.yml`, enter your website's URL into the value of `ALLOWED_ORIGINS`. Do **NOT** include a slash at the end, or you may encounter issues. Correct example: `ALLOWED_ORIGINS=https://kitsu.croco.dev`
-- In `Caddyfile`, on the first line, change `kitsu.croco.dev` to the same domain that you use in your server URL **without** the `https://`.
+	- You can allow multiple origins by separating the values with a comma.
+- In `Caddyfile`, on the first line, change `localhost` to the same domain that you use in your `ALLOWED_ORIGINS` **without** the `https://`.
 
 > After changing configuration, rebuild the container by running `docker compose up -d --build` again.
 
 ## Interaction and Endpoints
-The server addresses in this section are all written in terms of `kitsu.croco.dev`. Naturally, interactions with your own server would use your domain / IP.
+The server addresses in this section are all written in terms of `kitsu.croco.dev`. Naturally, interactions with your own server would use your domain / IP. For local hosting, this would be `localhost`.
 ### New Game
 - To start a new game, send a **POST** request to: `https://kitsu.croco.dev/new`
 	- Your request should be an `application/json` object. If empty, a level 0 game will be requested from the server.
@@ -100,3 +104,11 @@ The server addresses in this section are all written in terms of `kitsu.croco.de
 - `solution` is an object reserved for the complete board solution once the game is over. Until then, it is an empty list.
 	- If the environment variable `CLAMCASINO_DEBUG` is set to 1, then the `solution` key will display the complete board regardless of whether the game is over or not.
 	- The board solution follows the same format as `flip_lut`, except each value in the array is the actual value of the card it represents.
+
+## File Structure
+- `clam_casino_server/`: Contains all classes and objects for the API endpoints and actual game logic.
+- `Caddyfile`: Configuration for Caddy, which is the web server directly handing requests.
+- `Dockerfile`: Configuration for the Clam Casino server container image.
+	- If you wish to make configuration changes to the Clam Casino server, please do so in `docker-compose.yml` instead.
+- `docker-compose.yml`: Contains configuration for both the Clam Casino and the Caddy containers. 
+	- Most gameplay configuration changes (such as changing score limits, etc), should be done in the `environment:` section under the `clam_casino_server` container.
