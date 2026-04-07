@@ -11,8 +11,8 @@ The Clam Casino server currently runs in Python using [Flask](https://flask.pall
 **Note:** This is for self-hosting your own instance! If you are just looking to play the game, this is not what you're looking for. This assumes you have a computer to run it on and at least a little bit of command line experience.
 ### Requirements
 - [Docker](https://www.docker.com/get-started/) (v29.3 is tested, older versions may work)
-- **For local hosting / testing:** a modern, Chromium-based browser.
-	- Other browsers (like Firefox) are perfectly capable of interacting with the server, it is much more difficult to bypass the self-signed certificate warning.
+- **For local hosting / testing:** a modern (works with SSL), Chromium-based browser.
+	- Other browsers (like Firefox) are perfectly capable of interacting with the server, but it is much more difficult to bypass the self-signed certificate warning.
 - **For remote hosting / public servers:** a domain you own which points to the server you wish to host the Clam Casino server on.
 	- Setting up A records, port forwarding, etc, are out of scope of this guide. The rest of the instructions assume you are only testing locally.
 ### Installation Instructions
@@ -22,8 +22,8 @@ The Clam Casino server currently runs in Python using [Flask](https://flask.pall
 	- This will create the containers for the game server and the Caddy proxy and run them in the background.
 	- If this fails, it is likely that you are already running other servers on ports `80` or `443`. You can change the port mapping in `docker-compose.yml` to use alternative ports if needed. For example, change `80:80` to `8080:80` and `443:443` to `8443:443` to host the web server on ports `8080` and `8443`.
 ### Configuration
-After `docker-compose.yml`, rebuild the containers by running `docker compose up -d --build` again.
-If you change the `Caddyfile`, you can apply your changes by restarting the container. Run `docker container restart clam_casino_proxy`.
+- After modifying `docker-compose.yml` or source code, rebuild the containers by running `docker compose up -d --build` again.
+- If you change the `Caddyfile`, you can apply your changes by restarting the container. Run `docker container restart clam_casino_proxy`.
 #### Game
 - Game configuration (i.e. max score per level) is done through the environment variables set in the `docker-compose.yml` file. To modify the configuration, open the file in your favorite text editor and change the values of the variables. More information about their purpose is written in the file's comments.
 #### Server
