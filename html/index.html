@@ -45,12 +45,16 @@
         <div class="stats-bar">
             <span>Level: <span id="display-level">1</span></span>
             <span>Game Score: <span id="display-score">0</span></span>
-            <span>Total PScore: <span id="display-pscore">0</span></span>
+            <span>Lifetime Score: <span id="display-pscore">0</span></span>
         </div>
         <div id="board" class="board-wrapper"></div>
     </div>
 
     <script>
+        // Make the default URL the site that the user is connected to.
+        const url = window.location.hostname;
+        document.getElementById('server-ip').value = url;
+
         let currentGameId = null;
         let gameActive = false;
 
