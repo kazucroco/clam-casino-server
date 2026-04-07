@@ -5,9 +5,12 @@ from flask_cors import CORS
 import datetime
 from werkzeug.security import generate_password_hash
 import sqlite3
+from pathlib import Path
 
+db_path = Path("./data/pscores.sqlite")
+db_path.parent.mkdir(parents=True, exist_ok=True)
 
-conn = sqlite3.connect(f"./data/pscores.sqlite")
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 cursor.execute('''

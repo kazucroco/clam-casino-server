@@ -1,4 +1,5 @@
-kitsu.croco.dev {
+# Change "localhost" to your URL minus the https:// .. i.e) kitsu.croco.dev
+localhost {
     root * /var/www/html
     
     @static_files file {

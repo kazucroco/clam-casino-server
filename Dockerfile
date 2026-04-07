@@ -4,7 +4,6 @@ WORKDIR /clam_casino_server
 
 COPY clam_casino_server/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-VOLUME [ "/data" ]
 
 COPY clam_casino_server/ .
 

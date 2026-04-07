@@ -6,11 +6,10 @@ services:
       - "8000"
     restart: always
     volumes:
-      - ./clam_casino_server/data:/data
+      - clam_casino_data:/data
 
     environment:
-        # Replace kitsu.croco.dev with your own URL!
-        - ALLOWED_ORIGINS=https://kitsu.croco.dev
+        - ALLOWED_ORIGINS=https://localhost,https://kitsu.croco.dev
 
         # Provides the solution as a /flip response even before the game ends.
         - CLAMCASINO_DEBUG=1
@@ -69,10 +68,8 @@ services:
       - caddy_config:/config
     depends_on:
       - clam_casino_server
-    environment:
-      # Replace with your own domain excluding https:// 
-      - SERVER_DOMAIN=kitsu.croco.dev
 
 volumes:
   caddy_data:
   caddy_config:
+  clam_casino_data:
