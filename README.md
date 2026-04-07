@@ -22,14 +22,15 @@ The Clam Casino server currently runs in Python using [Flask](https://flask.pall
 	- This will create the containers for the game server and the Caddy proxy and run them in the background.
 	- If this fails, it is likely that you are already running other servers on ports `80` or `443`. You can change the port mapping in `docker-compose.yml` to use alternative ports if needed. For example, change `80:80` to `8080:80` and `443:443` to `8443:443` to host the web server on ports `8080` and `8443`.
 ### Configuration
+After `docker-compose.yml`, rebuild the containers by running `docker compose up -d --build` again.
+If you change the `Caddyfile`, you can apply your changes by restarting the container. Run `docker container restart clam_casino_proxy`.
 #### Game
 - Game configuration (i.e. max score per level) is done through the environment variables set in the `docker-compose.yml` file. To modify the configuration, open the file in your favorite text editor and change the values of the variables. More information about their purpose is written in the file's comments.
 #### Server
+By default, the configuration files in the repository are set up for local hosting. If you do not plan to publish your instance to a public website, do not change your `Caddyfile` or `ALLOWED_ORIGINS`.
 - In `docker-compose.yml`, enter your website's URL into the value of `ALLOWED_ORIGINS`. Do **NOT** include a slash at the end, or you may encounter issues. Correct example: `ALLOWED_ORIGINS=https://kitsu.croco.dev`
 	- You can allow multiple origins by separating the values with a comma.
 - In `Caddyfile`, on the first line, change `localhost` to the same domain that you use in your `ALLOWED_ORIGINS` **without** the `https://`.
-
-> After changing configuration, rebuild the container by running `docker compose up -d --build` again.
 
 ## Interaction and Endpoints
 The server addresses in this section are all written in terms of `kitsu.croco.dev`. Naturally, interactions with your own server would use your domain / IP. For local hosting, this would be `localhost`.
