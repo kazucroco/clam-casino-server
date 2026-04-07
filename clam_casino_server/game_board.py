@@ -26,6 +26,8 @@ class GameBoard:
         else: 
             maxlevel = int(os.getenv("MAX_LEVEL", 0))
 
+        # Update board size to serverside-configured size
+        size = int(os.getenv("BOARD_SIZE", 6))
 
         # Validate level value before generating a board.
         if level > maxlevel or level < 0:
