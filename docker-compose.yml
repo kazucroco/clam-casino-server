@@ -6,7 +6,7 @@ services:
       - "8000"
     restart: always
     volumes:
-      - clam_casino_data:/data
+      - clam_casino_data:/clam_casino_server/data
 
     environment:
         - ALLOWED_ORIGINS=https://localhost,https://kitsu.croco.dev
