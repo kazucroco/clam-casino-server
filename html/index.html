@@ -1,182 +1,298 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clam Casino</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>CLAM CASINO</title>
+    <link rel="stylesheet" href="style.css" />
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #2c3e50; color: white; display: flex; flex-direction: column; align-items: center; }
-        .controls { margin: 20px; padding: 15px; background: #34495e; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
-
-        #game-container { display: none; margin-top: 20px; }
-        .stats-bar { display: flex; justify-content: space-between; width: 100%; max-width: 600px; margin-bottom: 10px; font-weight: bold; }
-
-        .board-wrapper { display: grid; gap: 5px; background: #1a252f; padding: 10px; border-radius: 4px; }
-        .card { width: 60px; height: 60px; background: #3498db; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border-radius: 4px; user-select: none; }
-        .card.flipped { background: #ecf0f1; color: #2c3e50; cursor: default; }
-        .card.bomb { background: #e74c3c; color: white; }
-
-        .total-cell { width: 60px; height: 60px; background: #f1c40f; color: #2c3e50; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; border-radius: 4px; font-weight: bold; }
-        .total-cell span { font-size: 18px; }
-
-        input, select, button { padding: 8px; border-radius: 4px; border: none; }
-        button { background: #27ae60; color: white; cursor: pointer; font-weight: bold; }
-        button:hover { background: #2ecc71; }
+      #game-board {
+        grid-template-columns: repeat(var(--board-size, 6), 80px) 90px !important;
+        grid-template-rows: repeat(var(--board-size, 6), 80px) 90px !important;
+      }
     </style>
-</head>
-<body>
-
-    <h1>Clam Casino</h1>
-
-    <div class="controls">
-        <input type="text" id="server-ip" placeholder="Server (e.g. kitsu.croco.dev)" value="kitsu.croco.dev">
-        <label>Level:</label>
-        <select id="level-select">
-            <option value="0">1</option>
-            <option value="1">2</option>
-            <option value="2">3</option>
-            <option value="3">4</option>
-            <option value="4">5</option>
-        </select>
-        <button onclick="newGame()">New Game</button>
+  </head>
+  <body>
+    <div class="balatro-bg">
+      <div class="blob orange"></div>
+      <div class="blob blue"></div>
+      <div class="blob purple"></div>
     </div>
 
-    <div id="game-container">
-        <div class="stats-bar">
-            <span>Level: <span id="display-level">1</span></span>
-            <span>Game Score: <span id="display-score">0</span></span>
-            <span>Lifetime Score: <span id="display-pscore">0</span></span>
+    <div id="start-screen">
+      <form id="serverForm">
+        <h1 id="start-title">
+          <span>C</span><span>L</span><span>A</span><span>M</span>
+          <span class="space">&nbsp;</span>
+          <span>C</span><span>A</span><span>S</span><span>I</span><span>N</span
+          ><span>O</span>
+        </h1>
+
+        <div class="controls-container">
+        <!--
+          <input
+            type="range"
+            id="volume-slider"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.5"
+          />
+          -->
+          <div class="level-selector">
+            <label for="level-select">LEVEL:</label>
+            <select id="level-select">
+              <option value="0">1</option>
+              <option value="1">2</option>
+              <option value="2">3</option>
+              <option value="3">4</option>
+              <option value="4">5</option>
+            </select>
+          </div>
+          <button id="btn-start" type="submit">START GAME</button>
         </div>
-        <div id="board" class="board-wrapper"></div>
+
+        <div class="server-input-wrapper">
+          <div class="server-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="servername"
+            value="localhost"
+            placeholder="Server IP..."
+            autocomplete="off"
+          />
+        </div>
+      </form>
+    </div>
+
+    <audio id="bgm" src="MainTheme.mp3" loop preload="auto"></audio>
+
+    <div id="game-screen">
+      <h1 id="game-title">CLAM CASINO</h1>
+      <div id="score-board">
+        <div>Score: <span id="current-score">0</span></div>
+        <div id="lifetime-score-wrapper">
+          Lifetime: <span id="lifetime-score">0</span>
+        </div>
+      </div>
+      <button id="btn-restart-game">RESTART</button>
+      <button id="btn-main-menu">MAIN MENU</button>
+
+      <div id="game-board"></div>
+    </div>
+
+    <div id="game-over-screen">
+      <div class="modal-content">
+        <h2 id="game-over-title">Game Over</h2>
+        <p>Final Score: <span id="final-score">0</span></p>
+        <div class="modal-buttons">
+          <button id="btn-restart">Play Again</button>
+          <button id="btn-modal-menu">Main Menu</button>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Make the default URL the site that the user is connected to.
-        const url = window.location.hostname;
-        document.getElementById('server-ip').value = url;
+      const startScreen = document.getElementById("start-screen");
+      const gameScreen = document.getElementById("game-screen");
+      const gameOverScreen = document.getElementById("game-over-screen");
+      const serverForm = document.getElementById("serverForm");
+      const currentScoreEl = document.getElementById("current-score");
+      const lifetimeScoreEl = document.getElementById("lifetime-score");
+      const finalScoreEl = document.getElementById("final-score");
+      const gameOverTitle = document.getElementById("game-over-title");
+      const gameBoard = document.getElementById("game-board");
+      const bgmAudio = document.getElementById("bgm");
+      // const volumeSlider = document.getElementById("volume-slider");
 
-        let currentGameId = null;
-        let gameActive = false;
+      let serverUrl = "";
+      let currentGameId = null;
+      let isGameOver = false;
+      let isWaitingForServer = false;
+      let allCards = [];
 
-        async function newGame() {
-            const host = document.getElementById('server-ip').value;
-            const level = parseInt(document.getElementById('level-select').value);
-            const url = `https://${host}/new`;
+      /*
+      volumeSlider.addEventListener("input", (e) => {
+        bgmAudio.volume = e.target.value;
+      });
+      */
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ level: level })
-                });
+      const defaultUrl = window.location.hostname
+      document.getElementById("servername").value = defaultUrl
 
-                const data = await response.json();
-                setupBoard(data);
-            } catch (err) {
-                alert("Error connecting to server. Check IP and CORS settings.");
-                console.error(err);
+      serverForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        let inputUrl = document.getElementById("servername").value.trim();
+        if (!inputUrl.startsWith("http")) inputUrl = "https://" + inputUrl;
+        serverUrl = inputUrl;
+        startNewGame();
+      });
+
+      document
+        .getElementById("btn-restart-game")
+        .addEventListener("click", startNewGame);
+      document
+        .getElementById("btn-restart")
+        .addEventListener("click", startNewGame);
+      document
+        .getElementById("btn-main-menu")
+        .addEventListener("click", returnToMenu);
+      document
+        .getElementById("btn-modal-menu")
+        .addEventListener("click", returnToMenu);
+
+      function returnToMenu() {
+        gameScreen.style.display = "none";
+        gameOverScreen.style.display = "none";
+        startScreen.style.display = "flex";
+        isGameOver = true;
+      }
+
+      async function startNewGame() {
+        try {
+          const levelSelect = document.getElementById("level-select");
+          const selectedLevel = levelSelect ? parseInt(levelSelect.value) : 0;
+
+          const response = await fetch(`${serverUrl}/new`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ level: selectedLevel }),
+            credentials: "include",
+          });
+
+          if (!response.ok) throw new Error("Server connection failed");
+          const data = await response.json();
+
+          currentGameId = data.game_id;
+          if (lifetimeScoreEl) lifetimeScoreEl.innerText = data.pscore;
+
+          setupBoardFromAPI(data.totals);
+
+          startScreen.style.display = "none";
+          gameScreen.style.display = "block";
+
+          if (bgmAudio.paused) {
+            bgmAudio
+              .play()
+              .catch(() => console.log("BGM interaction required"));
+          }
+        } catch (err) {
+          alert("Connection Error. Check Server IP or CORS.");
+        }
+      }
+
+      function setupBoardFromAPI(totals) {
+        isGameOver = false;
+        currentScoreEl.innerText = "0";
+        gameOverScreen.style.display = "none";
+        gameBoard.innerHTML = "";
+        allCards = [];
+
+        const boardSize = totals.rows.length;
+        gameBoard.style.setProperty("--board-size", boardSize);
+
+        for (let r = 0; r < boardSize; r++) {
+          for (let c = 0; c < boardSize; c++) {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.setAttribute("data-row", r);
+            card.setAttribute("data-col", c);
+            card.innerHTML = `<div class="card-inner"><div class="card-front"></div><div class="card-back"></div></div>`;
+            card.addEventListener("click", handleCardClick);
+            gameBoard.appendChild(card);
+            allCards.push(card);
+          }
+          const rowHint = document.createElement("div");
+          rowHint.className = "hint row-hint";
+          rowHint.innerHTML = `<div class="hint-score"><span>${totals.rows[r][0]}</span></div><div class="hint-bombs"><span>${totals.rows[r][1]}</span> <span class="bomb-icon"></span></div>`;
+          gameBoard.appendChild(rowHint);
+        }
+
+        for (let c = 0; c < boardSize; c++) {
+          const colHint = document.createElement("div");
+          colHint.className = "hint col-hint";
+          colHint.innerHTML = `<div class="hint-score"><span>${totals.cols[c][0]}</span></div><div class="hint-bombs"><span>${totals.cols[c][1]}</span> <span class="bomb-icon"></span></div>`;
+          gameBoard.appendChild(colHint);
+        }
+      }
+
+      async function handleCardClick() {
+        if (
+          isGameOver ||
+          this.classList.contains("is-flipped") ||
+          isWaitingForServer
+        )
+          return;
+
+        const r = parseInt(this.getAttribute("data-row"));
+        const c = parseInt(this.getAttribute("data-col"));
+        const scoreBeforeFlip = parseInt(currentScoreEl.innerText) || 0;
+
+        isWaitingForServer = true;
+        try {
+          const response = await fetch(`${serverUrl}/flip/${currentGameId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ row: r, col: c }),
+            credentials: "include",
+          });
+
+          const data = await response.json();
+          this.classList.add("is-flipped", "val-" + data.card);
+          currentScoreEl.innerText = data.score;
+          if (lifetimeScoreEl) lifetimeScoreEl.innerText = data.pscore;
+
+          if (data.over) {
+            isGameOver = true;
+            const finalDisplayScore = data.score;
+            handleGameOverAPI(data, finalDisplayScore);
+          }
+        } catch (err) {
+          console.error("Flip Error:", err);
+        } finally {
+          isWaitingForServer = false;
+        }
+      }
+
+      function handleGameOverAPI(data, finalDisplayScore) {
+        setTimeout(() => {
+          allCards.forEach((card) => {
+            if (!card.classList.contains("is-flipped")) {
+              const r = parseInt(card.getAttribute("data-row"));
+              const c = parseInt(card.getAttribute("data-col"));
+              const actualVal = data.solution[r][c];
+
+              card.classList.add("is-flipped", "val-" + actualVal);
+              card.style.opacity = "0.6";
             }
-        }
-
-        function setupBoard(data) {
-            currentGameId = data.game_id;
-            gameActive = true;
-            const board = document.getElementById('board');
-            const container = document.getElementById('game-container');
-
-            // UI Updates
-            document.getElementById('display-level').innerText = data.level + 1;
-            document.getElementById('display-pscore').innerText = data.pscore;
-            document.getElementById('display-score').innerText = 0;
-            container.style.display = 'block';
-
-            // Grid setup: (size) cards + 1 info column/row
-            const totalSize = data.size + 1;
-            board.style.gridTemplateColumns = `repeat(${totalSize}, 60px)`;
-            board.innerHTML = '';
-
-            // Build rows
-            for (let r = 0; r < data.size; r++) {
-                for (let c = 0; c < data.size; c++) {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.id = `cell-${r}-${c}`;
-                    card.onclick = () => flipCard(r, c);
-                    board.appendChild(card);
-                }
-                // Row Total (End of row)
-                const rowTotal = data.totals.rows[r];
-                board.appendChild(createTotalCell(rowTotal));
-            }
-
-            // Bottom row (Column Totals)
-            for (let c = 0; c < data.size; c++) {
-                const colTotal = data.totals.cols[c];
-                board.appendChild(createTotalCell(colTotal));
-            }
-
-            // Bottom-right empty corner
-            const corner = document.createElement('div');
-            board.appendChild(corner);
-        }
-
-        function createTotalCell(totalArr) {
-            const div = document.createElement('div');
-            div.className = 'total-cell';
-            // totalArr format: [sum, zeroes]
-            div.innerHTML = `<span>${totalArr[0]}</span> ⓿ ${totalArr[1]}`;
-            return div;
-        }
-
-        async function flipCard(row, col) {
-            if (!gameActive) return;
-
-            const host = document.getElementById('server-ip').value;
-            const url = `https://${host}/flip/${currentGameId}`;
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ row, col })
-                });
-
-                const data = await response.json();
-                updateCard(row, col, data.card);
-
-                document.getElementById('display-score').innerText = data.score;
-                document.getElementById('display-pscore').innerText = data.pscore;
-
-                if (data.over) {
-                    gameActive = false;
-                    revealSolution(data.solution);
-                    setTimeout(() => alert(data.card === 0 ? "Bust! Game Over." : "Level Complete!"), 500);
-                }
-            } catch (err) {
-                console.error("Flip failed", err);
-            }
-        }
-
-        function updateCard(row, col, value) {
-            const cell = document.getElementById(`cell-${row}-${col}`);
-            cell.innerText = value;
-            cell.classList.add('flipped');
-            if (value === 0) cell.classList.add('bomb');
-        }
-
-        function revealSolution(solution) {
-            if (!solution || solution.length === 0) return;
-            for (let r = 0; r < solution.length; r++) {
-                for (let c = 0; c < solution[r].length; c++) {
-                    const cell = document.getElementById(`cell-${r}-${c}`);
-                    if (!cell.classList.contains('flipped')) {
-                        cell.innerText = solution[r][c];
-                        cell.style.opacity = "0.6";
-                        if (solution[r][c] === 0) cell.classList.add('bomb');
-                    }
-                }
-            }
-        }
+          });
+          finalScoreEl.innerText = finalDisplayScore;
+          const isWin = data.card !== 0;
+          gameOverTitle.innerText = isWin ? "YOU WIN!" : "BUST!";
+          gameOverTitle.style.color = isWin ? "#a8f7c8" : "#fc8181";
+          setTimeout(() => {
+            const showModal = () => {
+              gameOverScreen.style.display = "flex";
+              document.removeEventListener("click", showModal);
+            };
+            document.addEventListener("click", showModal);
+          }, 100);
+        }, 800);
+      }
     </script>
-</body>
+  </body>
 </html>
